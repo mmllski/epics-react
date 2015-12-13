@@ -9,7 +9,7 @@ var epics = require('epics')
 
 io.on('connection', function(socket){
   console.log('Client connected')
-  socket.on('change', function(data){
+  socket.on('TEST:AI', function(data){
     pv.put(data)
   })
 })
