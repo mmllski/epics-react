@@ -24,8 +24,19 @@ module.exports = React.createClass({
     return (
     <div>
       <h1> {this.props.desc} : {this.state.value} </h1>
+      <span>
+      <button
+        type="button"
+        onClick={this.handleClick}
+        className="btn btn-default">
+        Change to ddd100
+        </button></span>
     </div>
 
-  )}
+  )},
+  handleClick: function(){
+    this.socket.emit('change', 100)
+    console.log('emited from text')
+  }
 
 })

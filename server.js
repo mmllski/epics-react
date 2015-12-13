@@ -9,7 +9,9 @@ var epics = require('epics')
 
 io.on('connection', function(socket){
   console.log('Client connected')
-  socket.emit('sh', {foo: 'bar'})
+  socket.on('change', function(data){
+    pv.put(data)
+  })
 })
 
 
@@ -19,6 +21,7 @@ pv.on('value',function(data) {
   io.emit('TEST:AI', {'value': data})
   console.log('Current:',data);
 });
+
 
 pv.connect(function() {
   pv.monitor();

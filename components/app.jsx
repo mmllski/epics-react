@@ -1,26 +1,30 @@
 var React = require('react')
-var ReactDOM = require('react-dom')
 var TextPV = require('./text-widget')
+var Btn = require('./button')
 
 var App = React.createClass({
   render: function(){
-    return <div>
-    <h2> app level </h2>
-    <TextPV
-      PV="TEST:AI"
-      desc="Analog Input PV"
-      />
-    <TextPV
-      PV="TEST:BI"
-      desc="Binary Input PV"
-      />
+    return <div className="row panel panel-default">
+      <div className="col-md-8 col-md-offset-2">
+        <h2 className="text-center">
+          EPICS web interface
+        </h2>
+        <h1> App level </h1>
+        <hr />
+        <TextPV
+          PV="TEST:AI"
+          desc="Analog Input PV"/>
+        <Btn label="test" />
+
+
+    </div>
     </div>
   }
 })
 
 
 
-ReactDOM.render(
+React.render(
   <App />,
   document.querySelector('.app')
 );
