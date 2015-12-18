@@ -1,5 +1,3 @@
-
-
 module.exports = {
   entry: ['./app/app.jsx'],
   output: {
@@ -11,7 +9,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel']
+        loaders: ['react-hot', 'babel']
       }
     ]
   }
