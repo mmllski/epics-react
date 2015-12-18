@@ -1,8 +1,8 @@
 var React = require('react')
 var io = require('socket.io-client')
 
-var TextPV = require('./text-widget')
-var InPV = require('./input')
+var TextPV = require('./text-widget.jsx')
+var InPV = require('./input.jsx')
 
 var App = React.createClass({
   componentWillMount: function () {
