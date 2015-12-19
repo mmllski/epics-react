@@ -4,12 +4,46 @@ var io = require('socket.io-client')
 var TextPV = require('./text-widget.jsx')
 var InPV = require('./input.jsx')
 
+var pv = {
+      'TEST:AI': {
+        val: 0,
+        desc: 'Analog pv'
+      },
+      'TEST:BINARY': {
+        val: null,
+        desc: 'Binary pv'
+      },
+      'TEST:BLINK': {
+        val: null,
+        desc: 'Blink pv'
+      },
+      'TEST:CALC': {
+        val: null,
+        desc: 'Calc pv'
+      },
+      'TEST:PROGRESS': {
+        val: null,
+        desc: 'Progress pv'
+      }
+    };
+
 var App = React.createClass({
-  componentWillMount: function () {
-    this.io = io()
+  getInitialState: function () {
+    //TODO: Create pv list from file
+    return {
+      pv: pv
+    }
   },
-  componentWillUnmount: function () {
-      this.io.unmount()
+  componentDidMount: function () {
+    this.socket = io()
+    this.socket.on('update pv', function(update){
+      var newPV = this.state.pv
+      newPV[update.pv].val = update.val
+      this.setState({
+        pv: newPV
+      })
+
+    }.bind(this))
   },
   render: function(){
     return <div className="row panel panel-default">
@@ -17,20 +51,9 @@ var App = React.createClass({
         <h2 className="text-center">
           EPICS web interface
         </h2>
-        <h1> App level </h1>
         <hr />
-        <TextPV
-          io={this.io}
-          PV="TEST:AI"
-          desc="Analog Input"
-          />
-        <InPV
-          io={this.io}
-          PV="TEST:AI"
-          value="0"
-          />
-
-
+        <TextPV pv={this.state.pv['TEST:AI']}/>
+        <TextPV pv={this.state.pv['TEST:PROGRESS']}/>
     </div>
     </div>
   }

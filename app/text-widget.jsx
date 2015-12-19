@@ -11,21 +11,19 @@ module.exports = React.createClass({
   }
   },
   componentWillMount: function() {
-    this.props.io.on(this.props.PV, this.onValueChange)
-    this.setState({value: 0})
+
   },
   componentWillUnmount: function() {
-    this.props.socket.unmount()
+
   },
   render: function() {
     return (
     <div>
-      <h1> {this.props.desc} : {this.state.value} </h1>
+      <h1> {this.props.pv.desc}: {this.props.pv.val}</h1>
     </div>
 
   )},
-  onValueChange: function(data){
-    this.setState({value: data.value})
-  },
+
 
 })
+
