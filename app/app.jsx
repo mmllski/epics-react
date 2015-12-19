@@ -3,6 +3,7 @@ var io = require('socket.io-client')
 
 var TextPV = require('./components/text.jsx')
 var ProgressBar = require('./components/progressBar.jsx')
+var ButtonPV = require('./components/button.jsx')
 
 // TODO: Create pv list from file
 var pv = {
@@ -51,16 +52,27 @@ var App = React.createClass({
           EPICS web interface
         </h2>
         <hr />
-        <div>
-        <TextPV pv={this.state.pv['TEST:AI']}/>
+
         <div className='row'>
-        <TextPV pv={this.state.pv['TEST:PROGRESS']}/>
-        <ProgressBar pv={this.state.pv['TEST:PROGRESS']}/>
+          <div className='col-md-4'>I'm a generic controller for the PV:</div>
+          <div className='col-md-4'><TextPV pv={this.state.pv['TEST:AI']}/></div>
+          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:AI' label='Set to 100' val='100' /></div>
+          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:AI' label='Set to 200' val='200' /></div>
+
         </div>
+        <div className='row'>
+          <div className='col-md-4'>I'm a generic controller for the PV: </div>
+          <div className='col-md-4'><TextPV pv={this.state.pv['TEST:PROGRESS']}/></div>
+          <div className='col-md-4'><ProgressBar pv={this.state.pv['TEST:PROGRESS']}/></div>
         </div>
+
 
       </div>
     </div>
+  },
+  updatePV: function (component, e) {
+    this.socket.emit('client update', {pv: component.props.pv, val:component.props.val})
+
   }
 })
 

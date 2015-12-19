@@ -9,6 +9,9 @@ var pvList = ['TEST:AI', 'TEST:BINARY', 'TEST:BLINK', 'TEST:CALC', 'TEST:PROGRES
 
 io.on('connection', function (socket) {
   console.log('Client connected')
+  socket.on('client update', function (aa) {
+    console.log(aa)
+  })
 })
 
 // register listeners for each pv
