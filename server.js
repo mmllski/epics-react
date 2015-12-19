@@ -28,7 +28,7 @@ pv.connect(function() {
 });
 
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/build'))
 
 // routing for single page app
 app.get('/', function(req,res){
@@ -37,6 +37,6 @@ app.get('/', function(req,res){
 
 
 
-server.listen(8080, function(){
-  console.log('listening on 8080')
+server.listen(8081, function(){
+  console.log('listening on 8081')
 })
