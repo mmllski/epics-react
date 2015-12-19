@@ -35,7 +35,7 @@ var App = React.createClass({
     }
   },
   componentDidMount: function () {
-    this.socket = io()
+    this.socket = io('http://localhost:8081')
     this.socket.on('update pv', function (update) {
       var newPV = this.state.pv
       newPV[update.pv].val = update.val
