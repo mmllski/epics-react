@@ -9,21 +9,24 @@ var pvList = ['TEST:AI', 'TEST:BINARY', 'TEST:BLINK', 'TEST:CALC', 'TEST:PROGRES
 
 io.on('connection', function (socket) {
   console.log('Client connected')
-  socket.on('client update', function (aa) {
-    console.log(aa)
-  })
 })
+
+pvSocket = {}
 
 // register listeners for each pv
 pvList.forEach(function (pvInstance) {
-  var pv = new epics.Channel(pvInstance)
+  pvSocket[pvInstance] = new epics.Channel(pvInstance)
   console.log('Connected to ' + pvInstance)
-  pv.on('value', function (data) {
+  pvSocket[pvInstance].on('value', function (data) {
     io.emit('update pv', {'pv': pvInstance, 'val': data})
   })
-  pv.connect(function () {
-    pv.monitor()
+  pvSocket[pvInstance].connect(function () {
+    pvSocket[pvInstance].monitor()
   })
+})
+
+io.on('client update', function (aa) {
+  console.log(aa)
 })
 
 app.use(express.static(__dirname + '/build'))
