@@ -3,12 +3,9 @@ var React = require('react')
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      value: this.props.value,
+      value: this.props.pv.val,
       changed: false
     }
-  },
-  componentWillMount: function (){
-    this.props.io.on(this.props.PV, this.handleValueChange)
   },
   render: function () {
     return (
@@ -22,7 +19,7 @@ module.exports = React.createClass({
         <span className="input-group-btn">
           <button
             className="btn btn-default"
-            onClick={this.handleUpdatePV}
+            onClick={this.props.update.bind(null,this)}
             type="button">
             <span className="glyphicon glyphicon-play"> </span>
           </button>
@@ -32,22 +29,15 @@ module.exports = React.createClass({
   },
   handleOnKeyDown: function(event) {
     if(event.key == "Enter"){
-      this.handleUpdatePV()
+      this.props.update()
     }
     //e.persist()
     //console.log(e)
-  },
-
-  handleValueChange: function (data){
-    this.setState({value: data.value})
   },
 
   handleOnChange: function (event){
     this.setState({value: event.target.value})
   },
 
-  handleUpdatePV: function (event){
-    this.props.io.emit(this.props.PV, this.state.value)
-  }
 
 })
