@@ -4,7 +4,7 @@ var io = require('socket.io-client')
 var TextPV = require('./components/text.jsx')
 var ProgressBar = require('./components/progressBar.jsx')
 var ButtonPV = require('./components/button.jsx')
-
+var InputPV = require('./components/input.jsx')
 // TODO: Create pv list from file
 var pv = {
   'TEST:AI': {
@@ -12,7 +12,7 @@ var pv = {
     desc: 'Analog pv'
   },
   'TEST:BINARY': {
-    val: null,
+    val: 0,
     desc: 'Binary pv'
   },
   'TEST:BLINK': {
@@ -52,27 +52,31 @@ var App = React.createClass({
           EPICS web interface
         </h2>
         <hr />
-
         <div className='row'>
-          <div className='col-md-4'>I'm a generic controller for the PV:</div>
-          <div className='col-md-4'><TextPV pv={this.state.pv['TEST:AI']}/></div>
-          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:AI' label='Set to 100' val='100' /></div>
-          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:AI' label='Set to 200' val='200' /></div>
-
+          <div className='col-md-3'>Controller for the PV:</div>
+          <div className='col-md-3'><TextPV pv={this.state.pv['TEST:BINARY']}/></div>
+          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:BINARY' label='OFF' val='0' /></div>
+          <div className='col-md-2'><ButtonPV onClick={this.updatePV} pv='TEST:BINARY' label='ON' val='1' /></div>
         </div>
+        <hr />
         <div className='row'>
-          <div className='col-md-4'>I'm a generic controller for the PV: </div>
-          <div className='col-md-4'><TextPV pv={this.state.pv['TEST:PROGRESS']}/></div>
+          <div className='col-md-3'>Controller for the PV:</div>
+          <div className='col-md-3'><TextPV pv={this.state.pv['TEST:AI']}/></div>
+          <div className='col-md-4'><InputPV pv={this.state.pv['TEST:AI']} update={this.updatePV} value='-1' onClick={this.updatePV} /></div>
+        </div>
+        <hr />
+        <div className='row'>
+          <div className='col-md-3'>Controller for the PV: </div>
+          <div className='col-md-3'><TextPV pv={this.state.pv['TEST:PROGRESS']}/></div>
           <div className='col-md-4'><ProgressBar pv={this.state.pv['TEST:PROGRESS']}/></div>
         </div>
-
-
+        <hr />
       </div>
     </div>
   },
   updatePV: function (component, e) {
-    this.socket.emit('client update', {pv: component.props.pv, val:component.props.val})
-
+    console.log(component)
+    this.socket.emit('client update', {pv: component.props.pv, val: component.props.val})
   }
 })
 
