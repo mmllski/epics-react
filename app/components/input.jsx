@@ -19,7 +19,7 @@ module.exports = React.createClass({
         <span className="input-group-btn">
           <button
             className="btn btn-default"
-            onClick={this.props.update.bind(null,this)}
+            onClick={this.props.onClick.bind(null,this)}
             type="button">
             <span className="glyphicon glyphicon-play"> </span>
           </button>
