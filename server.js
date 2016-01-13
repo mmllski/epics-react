@@ -7,27 +7,33 @@ var epics = require('epics')
 // TODO: create the following array from file
 var pvList = ['TEST:AI', 'TEST:BINARY', 'TEST:BLINK', 'TEST:CALC', 'TEST:PROGRESS']
 
-io.on('connection', function (socket) {
-  console.log('Client connected')
+function createPvNamespace (pvName) {
+  return io.of('/' + pvName)
+}
+
+// Create namespaces
+var pvns
+pvList.forEach(function (pv) {
+  pvns = createPvNamespace(pv)
+  pvns.on('connection', handleConnection(pv, pvns))
 })
 
-pvSocket = {}
-
-// register listeners for each pv
-pvList.forEach(function (pvInstance) {
-  pvSocket[pvInstance] = new epics.Channel(pvInstance)
-  console.log('Connected to ' + pvInstance)
-  pvSocket[pvInstance].on('value', function (data) {
-    io.emit('update pv', {'pv': pvInstance, 'val': data})
-  })
-  pvSocket[pvInstance].connect(function () {
-    pvSocket[pvInstance].monitor()
-  })
-})
-
-io.on('client update', function (aa) {
-  console.log(aa)
-})
+function handleConnection (pv, pvns) {
+  return function (socket) {
+    // epics channel binding to socketio namespace
+    var pvSocket = new epics.Channel(pv)
+    console.log('PV connected to ' + pv)
+    pvSocket.on('value', function (data) {
+      pvns.emit('update', data)
+    })
+    pvSocket.connect(function () {
+      pvSocket.monitor()
+    })
+    socket.on('client update', function () {
+      console.log('client update')
+    })
+  }
+}
 
 app.use(express.static(__dirname + '/build'))
 
