@@ -37,7 +37,7 @@ var App = React.createClass({
   },
   componentDidMount: function () {
     this.socket = io('http://localhost:8081')
-    this.socket.on('update pv', function (update) {
+    this.socket.on('update', function (update) {
       var newPV = this.state.pv
       newPV[update.pv].val = update.val
       this.setState({
@@ -62,7 +62,7 @@ var App = React.createClass({
         <div className='row'>
           <div className='col-md-3'>Controller for the PV:</div>
           <div className='col-md-3'><TextPV pv={this.state.pv['TEST:AI']}/></div>
-          <div className='col-md-4'><InputPV pv={this.state.pv['TEST:AI']} update={this.updatePV} value='-1' onClick={this.updatePV} /></div>
+          <div className='col-md-4'><InputPV pv='TEST:AI' value='-1' onClick={this.updateFromInput} /></div>
         </div>
         <hr />
         <div className='row'>
@@ -75,8 +75,13 @@ var App = React.createClass({
     </div>
   },
   updatePV: function (component, e) {
-    console.log(component)
-    this.socket.emit('client update', {pv: component.props.pv, val: component.props.val})
+    console.log(component.props.pv)
+    this.socket.emit(component.props.pv + ' update', component.props.val)
+  },
+  updateFromInput: function (component, e) {
+    this.socket.emit(component.props.pv + ' update', component.state.value)
+    console.log(component.state.value)
+    console.log(component.props.pv)
   }
 })
 
