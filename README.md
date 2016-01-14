@@ -1,8 +1,7 @@
 EPICS web client made with React and Node.js. Node.js uses node-epics module to communicate with CA.
 Data is pushed to webpage via socket.io. Rendered by React.js
 
-Project contains webpack-dev-server to obtain hot-reload feature
-(you can edit source code and after save changes will appear on webpage)
+Project contains webpack-dev-server to obtain hot-reload feature.
 
  ---
 
