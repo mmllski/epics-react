@@ -76,10 +76,10 @@ var App = React.createClass({
   },
   updatePV: function (component, e) {
     console.log(component.props.pv)
-    this.socket.emit(component.props.pv + ' update', component.props.val)
+    this.socket.emit('client update', {'pv': component.props.pv, 'val': component.props.val})
   },
   updateFromInput: function (component, e) {
-    this.socket.emit(component.props.pv + ' update', component.state.value)
+    this.socket.emit('client update', {'pv': component.props.pv, 'val': component.state.value})
     console.log(component.state.value)
     console.log(component.props.pv)
   }

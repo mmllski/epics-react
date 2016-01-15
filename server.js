@@ -7,27 +7,24 @@ var epics = require('epics')
 // TODO: create the following array from the file
 var pvList = ['TEST:AI', 'TEST:BINARY', 'TEST:BLINK', 'TEST:CALC', 'TEST:PROGRESS']
 
-io.on('connection', handleConnection(pvList))
+var pvSocket = {}
+pvList.forEach(function (pv) {
+  pvSocket[pv] = new epics.Channel(pv)
+  console.log('Node connected to PV: ' + pv)
+  pvSocket[pv].on('value', function (data) {
+    io.emit('update', {'pv': pv, 'val': data})
+  })
+  pvSocket[pv].connect(function () {
+    pvSocket[pv].monitor()
+  })
+})
 
-function handleConnection (pvList) {
-  return function (socket) {
-    // epics channel binding to socketio namespace
-    pvList.forEach(function (pv) {
-      var pvSocket = new epics.Channel(pv)
-      console.log('Node connected to PV: ' + pv)
-      pvSocket.on('value', function (data) {
-        io.emit('update', {'pv': pv, 'val': data})
-      })
-      pvSocket.connect(function () {
-        pvSocket.monitor()
-      })
-      socket.on(pv + ' update', function (data) {
-        pvSocket.put(data)
-        console.log('client update > ' + pv + ': ' + data)
-      })
-    })
-  }
-}
+io.on('connection', function (client) {
+  console.log('Client connected')
+  client.on('client update', function (data) {
+    pvSocket[data.pv].put(data.val)
+  })
+})
 
 app.use(express.static(__dirname + '/build'))
 
