@@ -1,3 +1,4 @@
+![Screenshot](media/window.gif?raw=true)
 EPICS web client made with React and Node.js. Node.js uses node-epics module to communicate with CA.
 Data is pushed to webpage via socket.io. Rendered by React.js
 
